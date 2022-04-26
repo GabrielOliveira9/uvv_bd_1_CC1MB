@@ -1,0 +1,3 @@
+Este subdiretório contém os scripst necessários para implementação do banco de dados da atividade nos gerenciadores PostgreSQL, MariaDB/MySQL e Oracle.
+Os arquivos nomeados "tabelas<nome do gerenciador>", devem ser usados para criação e configuração das tabelas em seus respectivos sistemas.
+Já os arquivos nomeados "preenchimento<nome do gerenciador>", devem ser usados para preencher os bancos de dados com seus dados.
