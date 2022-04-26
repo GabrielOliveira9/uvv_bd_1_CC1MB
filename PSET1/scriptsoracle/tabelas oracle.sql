@@ -2,7 +2,7 @@
 
 /* As alterações nas restrições NOT NULL das tabelas FUNCIONARIO e TRABALHA EM que impediam o preenchimento de acordo com as imagens do documento ou de forma geral foram feitas durante a criação desse script. Portanto não há comentários nas colunas que foram modificadas (funcionario.cpf_supervisor e trabalha_em.horas)*/
 
-CREATE TABLE C##gabriel.funcionario (
+CREATE TABLE C##uvv.funcionario (
                 cpf CHAR(11) NOT NULL,
                 primeiro_nome VARCHAR2(15) NOT NULL,
                 nome_meio CHAR(1),
@@ -17,7 +17,7 @@ CREATE TABLE C##gabriel.funcionario (
 );
 
 
-CREATE TABLE C##gabriel.dependente (
+CREATE TABLE C##uvv.dependente (
                 cpf_funcionario CHAR(11) NOT NULL,
                 nome_dependente VARCHAR2(15) NOT NULL,
                 sexo CHAR(1),
@@ -27,7 +27,7 @@ CREATE TABLE C##gabriel.dependente (
 );
 
 
-CREATE TABLE C##gabriel.departamento (
+CREATE TABLE C##uvv.departamento (
                 numero_departamento NUMBER NOT NULL,
                 nome_departamento VARCHAR2(15) NOT NULL,
                 cpf_gerente CHAR(11) NOT NULL,
@@ -37,13 +37,13 @@ CREATE TABLE C##gabriel.departamento (
 
 /* para criar o índice da chave alternativa da tabela "departamento" (nome_departamento)*/
 
-CREATE UNIQUE INDEX C##gabriel.departamento_ak
- ON C##gabriel.departamento
+CREATE UNIQUE INDEX C##uvv.departamento_ak
+ ON C##uvv.departamento
  ( nome_departamento );
 
 /* Criar a tabela "projeto", suas colunas e chave primária (numero_projeto) */
 
-CREATE TABLE C##gabriel.projeto (
+CREATE TABLE C##uvv.projeto (
                 numero_projeto NUMBER NOT NULL,
                 nome_projeto VARCHAR2(15) NOT NULL,
                 local_projeto VARCHAR2(15),
@@ -53,13 +53,13 @@ CREATE TABLE C##gabriel.projeto (
 
 /* Criar o índice da chave alternativa da tabela "projeto" (nome_projeto)*/
 
-CREATE UNIQUE INDEX C##gabriel.projeto_ak
- ON C##gabriel.projeto
+CREATE UNIQUE INDEX C##uvv.projeto_ak
+ ON C##uvv.projeto
  ( nome_projeto );
 
 /* Para criar as tabelas "trabalha em" e "localizacoes departamento", suas colunas e respectivas chaves primárias (cpf_funcionario e numero_projeto, numero_departamento e local)*/
 
-CREATE TABLE C##gabriel.trabalha_em (
+CREATE TABLE C##uvv.trabalha_em (
                 cpf_funcionario CHAR(11) NOT NULL,
                 numero_projeto NUMBER NOT NULL,
                 horas NUMBER(3,1),
@@ -67,7 +67,7 @@ CREATE TABLE C##gabriel.trabalha_em (
 );
 
 
-CREATE TABLE C##gabriel.localizacoes_departamento (
+CREATE TABLE C##uvv.localizacoes_departamento (
                 numero_departamento NUMBER NOT NULL,
                 local VARCHAR2(15) NOT NULL,
                 CONSTRAINT LOCALIZACOES_DEPARTAMENTO_PK PRIMARY KEY (numero_departamento, local)
@@ -77,49 +77,49 @@ CREATE TABLE C##gabriel.localizacoes_departamento (
 
 /*Primeiro, a chave estrangeira da tabela "departamento" é "cpf_gerente", referenciando "cpf" da tabela funcionario*/
 
-ALTER TABLE C##gabriel.departamento ADD CONSTRAINT FUNCIONARIO_DEPARTAMENTO_FK
+ALTER TABLE C##uvv.departamento ADD CONSTRAINT FUNCIONARIO_DEPARTAMENTO_FK
 FOREIGN KEY (cpf_gerente)
-REFERENCES C##gabriel.funcionario (cpf)
+REFERENCES C##uvv.funcionario (cpf)
 NOT DEFERRABLE;
 
 /*Chave estrangeira da tabela "trabalha_em" é "cpf_funcionario", também referenciando "cpf" da tabela funcionario*/
 
-ALTER TABLE C##gabriel.trabalha_em ADD CONSTRAINT FUNCIONARIO_TRABALHA_EM_FK
+ALTER TABLE C##uvv.trabalha_em ADD CONSTRAINT FUNCIONARIO_TRABALHA_EM_FK
 FOREIGN KEY (cpf_funcionario)
-REFERENCES C##gabriel.funcionario (cpf)
+REFERENCES C##uvv.funcionario (cpf)
 NOT DEFERRABLE;
 
 /*Chave estrangeira da tabela "dependente" é "cpf_funcionario", que referencia "cpf" da tabela "funcionario"*/
 
-ALTER TABLE C##gabriel.dependente ADD CONSTRAINT FUNCIONARIO_DEPENDENTE_FK
+ALTER TABLE C##uvv.dependente ADD CONSTRAINT FUNCIONARIO_DEPENDENTE_FK
 FOREIGN KEY (cpf_funcionario)
-REFERENCES C##gabriel.funcionario (cpf)
+REFERENCES C##uvv.funcionario (cpf)
 NOT DEFERRABLE;
 
 /*Chave estrangeira da tabela "funcionario" é "cpf_supervisor", que referencia "cpf" na própria tabela 'funcionario"*/
 
-ALTER TABLE C##gabriel.funcionario ADD CONSTRAINT FUNCIONARIO_FUNCIONARIO_FK
+ALTER TABLE C##uvv.funcionario ADD CONSTRAINT FUNCIONARIO_FUNCIONARIO_FK
 FOREIGN KEY (cpf_supervisor)
-REFERENCES C##gabriel.funcionario (cpf)
+REFERENCES C##uvv.funcionario (cpf)
 NOT DEFERRABLE;
 
 /* Chave estrangeira da tabela "localizacoes_departamento" é "numero_departamento", referenciando "numero_departamento" na tabela "departamento*/
 
-ALTER TABLE C##gabriel.localizacoes_departamento ADD CONSTRAINT DEPARTAMENTO_LOCALIZACOES_D323
+ALTER TABLE C##uvv.localizacoes_departamento ADD CONSTRAINT DEPARTAMENTO_LOCALIZACOES_D323
 FOREIGN KEY (numero_departamento)
-REFERENCES C##gabriel.departamento (numero_departamento)
+REFERENCES C##uvv.departamento (numero_departamento)
 NOT DEFERRABLE;
 
 /* Chave estrangeira da tabela "projeto" é "numero_departamento", referenciando "numero_departamento" na tabela "departamento"*/
 
-ALTER TABLE C##gabriel.projeto ADD CONSTRAINT DEPARTAMENTO_PROJETO_FK
+ALTER TABLE C##uvv.projeto ADD CONSTRAINT DEPARTAMENTO_PROJETO_FK
 FOREIGN KEY (numero_departamento)
-REFERENCES C##gabriel.departamento (numero_departamento)
+REFERENCES C##uvv.departamento (numero_departamento)
 NOT DEFERRABLE;
 
 /* Segunda chave estrangeira da tabela "trabalha_em" é "numero_projeto", que referencia "numero_projeto" na tabela "projeto"*/
 
-ALTER TABLE C##gabriel.trabalha_em ADD CONSTRAINT PROJETO_TRABALHA_EM_FK
+ALTER TABLE C##uvv.trabalha_em ADD CONSTRAINT PROJETO_TRABALHA_EM_FK
 FOREIGN KEY (numero_projeto)
-REFERENCES C##gabriel.projeto (numero_projeto)
+REFERENCES C##uvv.projeto (numero_projeto)
 NOT DEFERRABLE;
