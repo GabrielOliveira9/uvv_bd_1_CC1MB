@@ -1,0 +1,73 @@
+RESOLUÇÃO PSET-2 
+
+1) select numero_departamento, avg(salario) as MédiaSalarial from funcionario group by numero_departamento;
+
+2) select sexo, avg(salario) as MédiaSalarial from funcionario group by sexo;
+
+3) select d.nome_departamento, concat(f.primeiro_nome, ' ', f.nome_meio,'.',' ', f.ultimo_nome) as Nome, f.data_nascimento, 
+   floor(datediff(curdate(), f.data_nascimento)/365.25) as Idade, f.salario
+   from departamento as d
+   right join funcionario as f
+   on d.numero_departamento = f.numero_departamento;
+
+4) select salario, concat(primeiro_nome, ' ', nome_meio,'.',' ',ultimo_nome) as Nome,
+   floor(datediff(curdate(),data_nascimento)/365.25) as Idade, salario*1.2 as reajuste from funcionario where salario < 35000
+   union
+   select salario, concat(primeiro_nome, ' ', nome_meio,'.',' ',ultimo_nome) as Nome,
+   floor(datediff(curdate(),data_nascimento)/365.25) as Idade, salario*1.15 as reajuste from funcionario where salario >= 35000;
+
+5) select d.nome_departamento, concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome) as Nome_gerente, 
+   concat(f2.primeiro_nome,' ',f2.nome_meio,'.',' ',f2.ultimo_nome) as Funcionario
+   from departamento as d
+   join funcionario as f on (d.cpf_gerente = f.cpf)
+   right join funcionario as f2 on (d.numero_departamento = f2.numero_departamento)
+   order by d.nome_departamento asc, f2.salario desc;
+
+6) select concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome) as Nome_Funcionario, d.nome_departamento, 
+   concat(d2.nome_dependente,' ',f.ultimo_nome) as Nome_Dependente, floor(datediff(curdate(),d2.data_nascimento)/365.25) as Idade_Dependente, 
+   case d2.sexo when 'f' then 'feminino' when 'm' then 'masculino' end as Sexo_Dependente
+   from funcionario as f join departamento as d on f.numero_departamento = d.numero_departamento
+   join dependente as d2 on f.cpf = d2.cpf_funcionario;
+
+7) select concat(primeiro_nome,' ',nome_meio,'.',' ',ultimo_nome) as Nome_Funcionario, 
+   case numero_departamento when '1' then 'Matriz' when '4' then 'Administração' when '5' then 'Pesquisa' end as Departamento,
+   salario from funcionario where cpf not in(select cpf_funcionario from dependente);
+
+8) select case p.numero_departamento when '1' then 'Matriz' when '4' then 'Administração' when '5' then 'Pesquisa' end as Departamento,
+   p.numero_projeto, p.nome_projeto, concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome) as Nome_Funcionario, t.horas
+   from projeto as p join trabalha_em as t on p.numero_projeto = t.numero_projeto
+   right join funcionario as f on t.cpf_funcionario = f.cpf order by numero_projeto, horas;
+
+9) select d.nome_departamento, p.nome_projeto, sum(t.horas) as Horas_Totais from trabalha_em as t 
+   join projeto as p on t.numero_projeto = p.numero_projeto
+   join departamento as d on p.numero_departamento = d.numero_departamento
+   group by t.numero_projeto;
+
+10) select numero_departamento, avg(salario) as Média_Salarial from funcionario group by numero_departamento;
+
+11) select concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome) as Nome_Funcionario, p.nome_projeto, t.horas*50 as Valor_a_Receber
+    from trabalha_em as t join projeto as p on t.numero_projeto = p.numero_projeto
+    join funcionario as f on t.cpf_funcionario = f.cpf;
+
+12) select d.nome_departamento, p.nome_projeto, concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome), t.horas 
+    from trabalha_em as t left join funcionario as f on t.cpf_funcionario = f.cpf
+    join projeto as p on t.numero_projeto = p.numero_projeto 
+    join departamento as d on p.numero_departamento = d.numero_departamento
+    where t.horas is null;
+
+13) select concat(primeiro_nome,' ',nome_meio,'.',' ',ultimo_nome) as Nome, sexo, floor(datediff(curdate(),data_nascimento)/365.25) as Idade 
+    from funcionario
+    union
+    select concat(d.nome_dependente,' ',f.ultimo_nome) as Nome, d.sexo, floor(datediff(curdate(),d.data_nascimento)/365.25) as Idade
+    from dependente as d join funcionario as f on d.cpf_funcionario = f.cpf
+    order by Idade desc;
+
+14) select numero_departamento as Departamento, count(cpf) as Numero_Funcionários from funcionario group by numero_departamento;
+
+15) select concat(f.primeiro_nome,' ',f.nome_meio,'.',' ',f.ultimo_nome) as Nome_Funcionario, f.numero_departamento, p.nome_projeto, t.numero_projeto
+    from trabalha_em as t join projeto as p on t.numero_projeto = p.numero_projeto
+    right join funcionario as f on (f.numero_departamento = p.numero_departamento and t.cpf_funcionario = f.cpf);
+   
+
+
+   
